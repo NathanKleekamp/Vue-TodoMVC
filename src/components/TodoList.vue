@@ -1,11 +1,12 @@
 <template>
   <ul class="todo-list">
-    <TodoView v-for="todo in todos" :key="todo.id" :text="todo.text"></TodoView>
+    <TodoView v-for="todo in getTodos" :key="todo.id" :todo="todo"></TodoView>
   </ul>
 </template>
-
 <script>
+
 import TodoView from '@/components/TodoView.vue';
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'todoList',
@@ -13,13 +14,10 @@ export default {
     TodoView,
   },
 
-  data() {
-    return {
-      todos: [
-        { id: 1, text: 'Do something'},
-        { id: 2, text: 'Do something else' },
-      ],
-    };
+  computed: {
+    ...mapGetters([
+      'getTodos'
+    ]),
   },
 }
 </script>

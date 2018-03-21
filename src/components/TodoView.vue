@@ -1,8 +1,8 @@
 <template>
-  <li>
+  <li v-bind:class="{ completed: todo.completed }">
     <div class="view">
       <input class="toggle" type="checkbox">
-      <label>{{text}}</label>
+      <label>{{todo.text}}</label>
       <button class="destroy"></button>
     </div>
     <input class="edit" value="Rull the web">
@@ -13,7 +13,7 @@
 export default {
   name: 'todoView',
   props: [
-    'text',
+    'todo',
   ]
 }
 </script>
