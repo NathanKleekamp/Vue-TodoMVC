@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer class="footer" v-if="getActiveTodosLength">
     <span class="todo-count"><strong>{{getActiveTodosLength}}</strong> item left</span>
     <ul class="filters">
       <li><a class="all trigger" v-on:click="onClickAll">All</a></li>
