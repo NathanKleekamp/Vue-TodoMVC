@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer" v-if="getActiveTodosLength">
+  <footer class="footer" v-if="getAllTodosLength">
     <span class="todo-count"><strong>{{getActiveTodosLength}}</strong> item left</span>
     <ul class="filters">
       <li><a class="all trigger" v-on:click="onClickAll">All</a></li>
@@ -32,6 +32,7 @@ export default {
   computed: {
     ...mapGetters([
       'getActiveTodosLength',
+      'getAllTodosLength',
     ]),
   },
 
