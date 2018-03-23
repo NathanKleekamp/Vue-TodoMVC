@@ -5,26 +5,24 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'toggleAll',
 
-  data() {
-    return {
-      isAllComplete: false,
-    };
+  computed: {
+    ...mapGetters([
+      'getIsAllComplete',
+    ]),
   },
 
   methods: {
     onClickToggleAll() {
-      if (this.isAllComplete) {
-        this.toggleAllIncomplete();
-        this.isAllComplete = false;
-      } else {
-        this.toggleAllComplete();
-        this.isAllComplete = true;
+      if (!this.getIsAllComplete) {
+        return this.toggleAllComplete();
       }
+
+      this.toggleAllIncomplete();
     },
 
     ...mapActions([

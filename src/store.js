@@ -170,5 +170,9 @@ export default new Vuex.Store({
     getAllTodosLength(state) {
       return state.todos.length;
     },
+
+    getIsAllComplete(state) {
+      return (state.todos.filter(todo => todo.completed === false).length === 0);
+    },
   },
 })
