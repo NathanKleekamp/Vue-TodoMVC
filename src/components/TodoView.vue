@@ -1,7 +1,7 @@
 <template>
   <li v-bind:class="{ completed: todo.completed }">
     <div class="view">
-      <input class="toggle" type="checkbox" v-on:click="onClickCheckbox">
+      <input class="toggle" type="checkbox" v-bind:checked="todo.completed" v-on:click="onClickCheckbox">
       <label v-on:dblclick="toggleEdit">{{todo.text}}</label>
       <button class="destroy" v-on:click="onClickDestroy"></button>
     </div>

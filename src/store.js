@@ -91,6 +91,21 @@ export default new Vuex.Store({
       const todos = [].concat(state.todos.slice(0, index), completed, state.todos.slice(index + 1, state.todos.length));
       state.todos = todos;
     },
+
+    // @todo This could be combined with toggleAllIncomplete, probably
+    toggleAllComplete(state) {
+      state.todos = state.todos.map(todo => {
+        todo.completed = true;
+        return todo;
+      });
+    },
+
+    toggleAllIncomplete(state) {
+      state.todos = state.todos.map(todo => {
+        todo.completed = false;
+        return todo;
+      });
+    },
   },
 
   actions: {
@@ -116,6 +131,14 @@ export default new Vuex.Store({
 
     setCompleted({ commit }, id) {
       commit('setCompleted', id);
+    },
+
+    toggleAllComplete({ commit }) {
+      commit('toggleAllComplete');
+    },
+
+    toggleAllIncomplete({ commit }) {
+      commit('toggleAllIncomplete');
     },
   },
 
