@@ -53,14 +53,14 @@ export default {
     },
 
     onClickClearCompleted() {
-      this.clearCompleted();
+      this.destroyAllCompleted();
     },
 
     ...mapActions([
       'filterByAll',
       'filterByActive',
       'filterByCompleted',
-      'clearCompleted',
+      'destroyAllCompleted',
     ]),
   }
 };

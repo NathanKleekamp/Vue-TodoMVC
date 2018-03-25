@@ -19,15 +19,15 @@ export default {
   methods: {
     onClickToggleAll() {
       if (!this.getIsAllComplete) {
-        return this.toggleAllComplete();
+        return this.setAllComplete();
       }
 
-      this.toggleAllIncomplete();
+      this.setAllIncomplete();
     },
 
     ...mapActions([
-      'toggleAllComplete',
-      'toggleAllIncomplete',
+      'setAllComplete',
+      'setAllIncomplete',
     ]),
   }
 };

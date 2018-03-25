@@ -2,10 +2,10 @@
   <li v-bind:class="{ completed: todo.completed }">
     <div class="view">
       <input class="toggle" type="checkbox" v-bind:checked="todo.completed" v-on:click="onClickCheckbox">
-      <label v-on:dblclick="toggleEdit">{{todo.text}}</label>
+      <label v-on:dblclick="enableEditing">{{todo.text}}</label>
       <button class="destroy" v-on:click="onClickDestroy"></button>
     </div>
-    <input class="edit" v-bind:value="todo.text" v-on:blur="toggleEdit">
+    <input class="edit" v-on:keyup="onKeyup" v-bind:value="todo.text" v-on:blur="disableEditing">
   </li>
 </template>
 
@@ -33,15 +33,33 @@ export default {
       this.setCompleted(this.todo.id);
     },
 
-    toggleEdit() {
-      const isEditing = this.$el.classList.contains('editing');
-      this.$el.classList.toggle('editing', !isEditing);
+    onKeyup(e) {
+      if (e.keyCode === 13) {
+        const payload = {
+          id: this.todo.id,
+          value: e.target.value,
+        };
+
+        this.editTodo(payload);
+        this.disableEditing(e);
+      }
+    },
+
+    enableEditing(e) {
+      this.$el.classList.add('editing');
       this.$el.querySelector('.edit').focus();
+      e.target.value = this.todo.text;
+    },
+
+    disableEditing(e) {
+      this.$el.classList.remove('editing');
+      e.target.value = this.todo.text;
     },
 
     ...mapActions([
       'destroyTodo',
       'setCompleted',
+      'editTodo',
     ]),
   },
 }

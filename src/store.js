@@ -7,6 +7,8 @@ const CONSTANTS = {
   FILTER_BY_ALL: 'all',
   FILTER_BY_ACTIVE: 'active',
   FILTER_BY_COMPLETED: 'completed',
+  COMPLETED: 'completed',
+  TEXT: 'text',
 };
 
 function getAll(state) {
@@ -21,6 +23,32 @@ function getCompleted(state) {
   return state.todos.filter(todo => todo.completed);
 }
 
+function updateTodo({ state, id, prop, value}) {
+  let index;
+  let updated;
+
+  const found = state.todos.find((todo, idx) => {
+    index = idx;
+    return todo.id === id
+  });
+
+  switch (prop) {
+    case CONSTANTS.COMPLETED:
+      updated = Object.assign({}, found, { completed: !found.completed });
+      break;
+
+    case CONSTANTS.TEXT:
+      updated = Object.assign({}, found, { text: value });
+      break;
+
+    default:
+      return state.todos;
+  }
+
+  // Insert the updated completed todo in the same location it was before
+  return [].concat(state.todos.slice(0, index), updated, state.todos.slice(index + 1, state.todos.length));
+}
+
 // Todo object format
 //  todo: {
 //    text: '',
@@ -29,23 +57,7 @@ function getCompleted(state) {
 
 export default new Vuex.Store({
   state: {
-    todos: [
-      {
-        id: 1,
-        text: 'Do something',
-        completed: false,
-      },
-      {
-        id: 2,
-        text: 'Do something else',
-        completed: true,
-      },
-      {
-        id: 3,
-        text: 'Do a third thing',
-        completed: true,
-      },
-    ],
+    todos: [],
     filterBy: 'active',
   },
 
@@ -69,7 +81,7 @@ export default new Vuex.Store({
       }
     },
 
-    clearCompleted(state) {
+    destroyAllCompleted(state) {
       state.todos = getActive(state);
     },
 
@@ -78,33 +90,47 @@ export default new Vuex.Store({
     },
 
     setCompleted(state, id) {
-      let index;
+      const update = {
+        prop: CONSTANTS.COMPLETED,
+        state,
+        id,
+      };
 
-      const found = state.todos.find((todo, idx) => {
-        index = idx;
-        return todo.id === id
-      });
-
-      const completed = Object.assign({}, found, { completed: !found.completed });
-
-      // Insert the updated completed todo in the same location it was before
-      const todos = [].concat(state.todos.slice(0, index), completed, state.todos.slice(index + 1, state.todos.length));
-      state.todos = todos;
+      state.todos = updateTodo(update);
     },
 
-    // @todo This could be combined with toggleAllIncomplete, probably
-    toggleAllComplete(state) {
+    // @todo This could be combined with setAllIncomplete, probably
+    setAllComplete(state) {
       state.todos = state.todos.map(todo => {
         todo.completed = true;
         return todo;
       });
     },
 
-    toggleAllIncomplete(state) {
+    setAllIncomplete(state) {
       state.todos = state.todos.map(todo => {
         todo.completed = false;
         return todo;
       });
+    },
+
+    createTodo(state, payload) {
+      state.todos = state.todos.concat([{
+        text: payload,
+        completed: false,
+        id: Date.now(),
+      }]);
+    },
+
+    editTodo(state, {id, value}) {
+      const update = {
+        prop: CONSTANTS.TEXT,
+        state,
+        value,
+        id,
+      };
+
+      state.todos = updateTodo(update);
     },
   },
 
@@ -121,8 +147,8 @@ export default new Vuex.Store({
       commit('filterBy', CONSTANTS.FILTER_BY_ACTIVE);
     },
 
-    clearCompleted({ commit }) {
-      commit('clearCompleted');
+    destroyAllCompleted({ commit }) {
+      commit('destroyAllCompleted');
     },
 
     destroyTodo({ commit }, id) {
@@ -133,12 +159,20 @@ export default new Vuex.Store({
       commit('setCompleted', id);
     },
 
-    toggleAllComplete({ commit }) {
-      commit('toggleAllComplete');
+    setAllComplete({ commit }) {
+      commit('setAllComplete');
     },
 
-    toggleAllIncomplete({ commit }) {
-      commit('toggleAllIncomplete');
+    setAllIncomplete({ commit }) {
+      commit('setAllIncomplete');
+    },
+
+    createTodo({ commit }, todo) {
+      commit('createTodo', todo);
+    },
+
+    editTodo({ commit }, todo) {
+      commit('editTodo', todo);
     },
   },
 
