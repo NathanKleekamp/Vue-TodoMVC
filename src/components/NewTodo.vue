@@ -10,8 +10,8 @@ export default {
 
   methods: {
     onKeyup(e) {
-      if (e.keyCode === 13) {
-        this.createTodo(e.target.value);
+      if (e.keyCode === 13 && e.target.value !== '') {
+        this.createTodo(e.target.value.trim());
         e.target.value = "";
       }
     },

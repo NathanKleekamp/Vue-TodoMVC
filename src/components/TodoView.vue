@@ -37,7 +37,7 @@ export default {
       if (e.keyCode === 13) {
         const payload = {
           id: this.todo.id,
-          value: e.target.value,
+          value: e.target.value.trim(),
         };
 
         this.editTodo(payload);
